@@ -3,6 +3,7 @@ package com.uvg.gt;
 import java.util.List;
 
 import com.uvg.gt.Model.Node;
+import com.uvg.gt.Model.Relationship;
 
 public interface IPathFinder {
 
@@ -15,11 +16,11 @@ public interface IPathFinder {
     public void updateShortestPath();
 
     /**
-     * Return the ordered list of nodes, to move from one to another.
+     * Return the ordered list of relations, to move from one to another.
      * 
      * @param StartNode Starting node.
      * @param EndNode   Ending node.
      * @return List of steps to move from one to another.
      */
-    public List<Node> constructPath(Node StartNode, Node EndNode);
+    public List<Relationship> constructPath(Node StartNode, Node EndNode);
 }

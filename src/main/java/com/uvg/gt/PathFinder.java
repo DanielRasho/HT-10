@@ -3,6 +3,7 @@ package com.uvg.gt;
 import java.util.List;
 
 import com.uvg.gt.Model.Node;
+import com.uvg.gt.Model.Relationship;
 
 public class PathFinder implements IPathFinder {
     private IGraph graph;
@@ -18,7 +19,7 @@ public class PathFinder implements IPathFinder {
     }
 
     @Override
-    public List<Node> constructPath(Node StartNode, Node EndNode) {
+    public List<Relationship> constructPath(Node StartNode, Node EndNode) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'constructPath'");
     }
