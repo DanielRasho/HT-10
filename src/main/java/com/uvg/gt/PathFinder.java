@@ -18,7 +18,7 @@ public class PathFinder implements IPathFinder {
     }
 
     @Override
-    public List<Node> constructPath(String StartNode, String EndNode) {
+    public List<Node> constructPath(Node StartNode, Node EndNode) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'constructPath'");
     }

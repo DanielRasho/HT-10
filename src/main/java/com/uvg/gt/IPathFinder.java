@@ -17,9 +17,9 @@ public interface IPathFinder {
     /**
      * Return the ordered list of nodes, to move from one to another.
      * 
-     * @param StartNode Label of the starting node.
-     * @param EndNode   Label of the ending node.
+     * @param StartNode Starting node.
+     * @param EndNode   Ending node.
      * @return List of steps to move from one to another.
      */
-    public List<Node> constructPath(String StartNode, String EndNode);
+    public List<Node> constructPath(Node StartNode, Node EndNode);
 }
