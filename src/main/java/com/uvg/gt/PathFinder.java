@@ -24,4 +24,10 @@ public class PathFinder implements IPathFinder {
         throw new UnsupportedOperationException("Unimplemented method 'constructPath'");
     }
 
+    @Override
+    public Node getCentralNode() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCentralNode'");
+    }
+
 }
