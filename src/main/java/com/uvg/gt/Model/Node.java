@@ -1,4 +1,4 @@
-package com.uvg.gt;
+package com.uvg.gt.Model;
 
 import java.util.HashMap;
 

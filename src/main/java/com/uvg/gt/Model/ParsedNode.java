@@ -1,4 +1,4 @@
-package com.uvg.gt;
+package com.uvg.gt.Model;
 
 public class ParsedNode {
     private String from;

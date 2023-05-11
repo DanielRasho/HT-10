@@ -2,6 +2,8 @@ package com.uvg.gt;
 
 import java.util.List;
 
+import com.uvg.gt.Model.Node;
+
 public interface IPathFinder {
 
     /**
@@ -14,8 +16,9 @@ public interface IPathFinder {
 
     /**
      * Return the ordered list of nodes, to move from one to another.
+     * 
      * @param StartNode Label of the starting node.
-     * @param EndNode Label of the ending node.
+     * @param EndNode   Label of the ending node.
      * @return List of steps to move from one to another.
      */
     public List<Node> constructPath(String StartNode, String EndNode);

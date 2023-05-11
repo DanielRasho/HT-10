@@ -2,6 +2,8 @@ package com.uvg.gt;
 
 import java.util.List;
 
+import com.uvg.gt.Model.Node;
+
 public class PathFinder implements IPathFinder {
     private IGraph graph;
 

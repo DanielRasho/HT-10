@@ -2,6 +2,9 @@ package com.uvg.gt;
 
 import java.util.List;
 
+import com.uvg.gt.Model.Node;
+import com.uvg.gt.Model.Relationship;
+
 public class Graph implements IGraph {
 
     public Graph(List<Relationship> relations) {
