@@ -23,6 +23,10 @@ public class Node {
         return id;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
     public void addNeighbor(Node neighbor, int weight) {
         neighbors.put(neighbor, weight);
     }
