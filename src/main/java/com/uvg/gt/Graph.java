@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Graph implements IGraph {
 
-    public Graph(List<Node> initialNodes) {
+    public Graph(List<Relationship> relations) {
     }
 
     @Override
