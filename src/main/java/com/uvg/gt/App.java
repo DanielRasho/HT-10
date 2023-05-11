@@ -1,16 +1,201 @@
 package com.uvg.gt;
 
+import java.io.File;
 import java.time.Clock;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
+
+import com.uvg.gt.Model.Climates;
+import com.uvg.gt.Model.DataParser;
+import com.uvg.gt.Model.Node;
+import com.uvg.gt.Model.Relationship;
 
 public class App {
 
     public static void main(String[] args) {
         clearConsole();
         showTitle(_title, ANSI_PURPLE);
+
+        final var parser = new DataParser();
+        final List<Relationship> relations = new ArrayList<>();
+        while (true) {
+            var filePath = formLabel("Ingrese la ruta al archivo con datos", ANSI_CYAN);
+            try {
+                var file = new File(filePath);
+                var sc = new Scanner(file);
+                while (sc.hasNextLine()) {
+                    relations.add(parser.parse(sc.nextLine()));
+                }
+                sc.close();
+                break;
+            } catch (Exception e) {
+                writeErrorMessage("¡Por favor ingrese una ruta válida!");
+                continue;
+            }
+        }
+
+        final IGraph graph = new Graph(relations);
+        final IPathFinder pathFinder = new PathFinder(graph);
+        pathFinder.updateShortestPath();
+
+        while (true) {
+            final var nodes = graph.getNodes();
+
+            printSpaceSeparated("1)", "Calcular mejor ruta", ANSI_YELLOW);
+            printSpaceSeparated("2)", "Encontrar ciudad central", ANSI_YELLOW);
+            printSpaceSeparated("3)", "Remover carretera", ANSI_YELLOW);
+            printSpaceSeparated("4)", "Construir carretera", ANSI_YELLOW);
+            printSpaceSeparated("5)", "Ver clima", ANSI_YELLOW);
+            printSpaceSeparated("q)", "Salir", ANSI_YELLOW);
+
+            var answer = formLabel("Por favor seleccione una opción", ANSI_CYAN);
+
+            if (answer.equals("q")) {
+                break;
+            }
+
+            if (answer.equals("1")) {
+                showNodes(nodes);
+                var limits = askForLimits(nodes);
+
+                List<Relationship> path = pathFinder.constructPath(limits.getOrigin(), limits.getDestination());
+                consoleWriteLine("El mejor camino es:");
+                consoleWrite(path.get(0).getOrigin(), ANSI_GREEN);
+                consoleWrite(" -> ", ANSI_YELLOW);
+                consoleWrite(path.get(0).getDestination(), ANSI_GREEN);
+
+                for (int i = 1; i < path.size(); i++) {
+                    consoleWrite(" -> ", ANSI_YELLOW);
+                    consoleWrite(path.get(i).getDestination(), ANSI_GREEN);
+                }
+
+            } else if (answer.equals("2")) {
+                progressBar("Finding\t", FRAMES);
+                var center = pathFinder.getCentralNode();
+                consoleWriteLine(center.getLabel(), ANSI_GREEN);
+
+            } else if (answer.equals("3")) {
+                showNodes(nodes);
+                var limits = askForLimits(nodes);
+
+                graph.removeRelation(limits.getOrigin(), limits.getDestination());
+                writeSuccessMessage("¡La carretera fue removida satisfactoriamente!");
+
+            } else if (answer.equals("4")) {
+                showNodes(nodes);
+                var limits = askForLimits(nodes);
+
+                consoleWriteLine(SUB_DIVIDER);
+                consoleWriteLine("Tiempos de recorrido", ANSI_WHITE, ANSI_PURPLE_BACKGROUND);
+                Function<String, Boolean> positiveIntCheck = s -> {
+                    try {
+                        var n = Integer.parseInt(s);
+                        return n >= 0;
+                    } catch (Exception e) {
+                        writeErrorMessage("¡Por favor ingrese un tiempo válido!");
+                        return false;
+                    }
+                };
+                final var normalWeight = formLabel("Ingrese el tiempo normal", ANSI_CYAN, positiveIntCheck,
+                        Integer::parseInt);
+                final var rainWeight = formLabel("Ingrese el tiempo en llovizna", ANSI_CYAN, positiveIntCheck,
+                        Integer::parseInt);
+                final var blizzardWeight = formLabel("Ingrese el tiempo con nieve", ANSI_CYAN, positiveIntCheck,
+                        Integer::parseInt);
+                final var stormWeight = formLabel("Ingrese el tiempo en tormenta", ANSI_CYAN, positiveIntCheck,
+                        Integer::parseInt);
+
+                final HashMap<Climates, Integer> weights = new HashMap<>() {
+                    {
+                        put(Climates.NORMAL, normalWeight);
+                        put(Climates.RAIN, rainWeight);
+                        put(Climates.BLIZZARD, blizzardWeight);
+                        put(Climates.STORM, stormWeight);
+                    }
+                };
+
+                final var relation = new Relationship(limits.getOrigin(), limits.getDestination(), weights);
+                graph.addRelation(relation);
+                writeSuccessMessage("¡La carretera fue creada satisfactoriamente!");
+            } else if (answer.equals("5")) {
+                showNodes(nodes);
+
+                Optional<Relationship> result = Optional.empty();
+                while (result.isEmpty()) {
+                    var limits = askForLimits(nodes);
+                    result = graph.getRelation(limits.getOrigin(), limits.getDestination());
+                }
+
+                final HashMap<Climates, String> translate = new HashMap<>() {
+                    {
+                        put(Climates.NORMAL, "Normal");
+                        put(Climates.BLIZZARD, "Nevado");
+                        put(Climates.RAIN, "Lluvia");
+                        put(Climates.STORM, "Tormenta");
+                    }
+                };
+
+                result.ifPresent(relation -> {
+                    writeSuccessMessage("El clima es: " + translate.get(relation.getClimate()));
+                });
+            } else {
+                writeErrorMessage("¡Selecciona una opción válida!");
+            }
+        }
+
+        consoleWriteLine("Gracias por usar nuestro servicio");
+    }
+
+    private static void showNodes(List<Node> nodes) {
+        for (int i = 0; i < nodes.size(); i++) {
+            printSpaceSeparated(i + 1 + ")", nodes.get(i).getLabel(), ANSI_CYAN);
+        }
+    }
+
+    private static Limits<Node> askForLimits(List<Node> nodes) {
+        return askForLimits(nodes, "Seleccione la ciudad de origen", "Seleccione la ciudad de destino");
+    }
+
+    private static Limits<Node> askForLimits(List<Node> nodes, String originLabel, String destinationLabel) {
+        final Function<String, Boolean> isIntAndInList = s -> {
+            try {
+                var n = Integer.parseInt(s);
+                return n > 0 && n < nodes.size();
+            } catch (Exception e) {
+                writeErrorMessage("¡Por favor seleccione una opción válida!");
+                return false;
+            }
+        };
+        final var originIndex = formLabel(originLabel, ANSI_CYAN, isIntAndInList,
+                Integer::parseInt);
+        final var destinationIndex = formLabel(destinationLabel, ANSI_CYAN,
+                isIntAndInList, Integer::parseInt);
+
+        return new Limits<>(nodes.get(originIndex), nodes.get(destinationIndex));
+    }
+
+    private static class Limits<T> {
+        private T origin;
+        private T destination;
+
+        public Limits(T origin, T destination) {
+            this.origin = origin;
+            this.destination = destination;
+
+        }
+
+        public T getOrigin() {
+            return origin;
+        }
+
+        public T getDestination() {
+            return destination;
+        }
     }
 
     public static ArrayList<Object> _title = new ArrayList<>() {
@@ -160,6 +345,14 @@ public class App {
     static final int DIVIDER_HALF_LENGTH = DIVIDER_LENGTH / 2;
     static final String DIVIDER = new String(new char[DIVIDER_LENGTH]).replace("\0", "=");
     static final String SUB_DIVIDER = new String(new char[DIVIDER_LENGTH]).replace("\0", "-");
+    static final Iterable<Object> FRAMES = new ArrayList<>() {
+        {
+            add("-");
+            add("\\");
+            add("|");
+            add("/");
+        }
+    };
 
     public static String formLabel(Object label, String color) {
         consoleWrite(label + ": ");
