@@ -26,6 +26,10 @@ public class Relationship {
         return weights.get(currentClimate);
     }
 
+    public Climates getClimate() {
+        return currentClimate;
+    }
+
     public void changeClimate(Climates newClimate) {
         currentClimate = newClimate;
     }
