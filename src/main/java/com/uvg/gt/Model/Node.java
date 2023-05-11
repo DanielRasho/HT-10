@@ -38,12 +38,12 @@ public class Node {
         }
 
         Node other = (Node) obj;
-        return id == other.getId();
+        return id == other.getId() && label.equals(other.getLabel());
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return label.hashCode();
     }
 
     @Override
