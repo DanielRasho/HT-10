@@ -4,6 +4,9 @@ import java.util.List;
 
 public class Graph implements IGraph {
 
+    public Graph(List<Node> initialNodes) {
+    }
+
     @Override
     public void addNode(Node node) {
         // TODO Auto-generated method stub

@@ -3,6 +3,11 @@ package com.uvg.gt;
 import java.util.List;
 
 public class PathFinder implements IPathFinder {
+    private IGraph graph;
+
+    public PathFinder(IGraph graph) {
+        this.graph = graph;
+    }
 
     @Override
     public void updateShortestPath() {
