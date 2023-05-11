@@ -84,8 +84,8 @@ public class App {
                 var limits = askForLimits(nodes);
 
                 graph.removeRelation(limits.getOrigin(), limits.getDestination());
+                pathFinder.updateShortestPath();
                 writeSuccessMessage("¡La carretera fue removida satisfactoriamente!");
-
             } else if (answer.equals("4")) {
                 showNodes(nodes);
                 var limits = askForLimits(nodes);
@@ -121,6 +121,7 @@ public class App {
 
                 final var relation = new Relationship(limits.getOrigin(), limits.getDestination(), weights);
                 graph.addRelation(relation);
+                pathFinder.updateShortestPath();
                 writeSuccessMessage("¡La carretera fue creada satisfactoriamente!");
             } else if (answer.equals("5")) {
                 showNodes(nodes);
