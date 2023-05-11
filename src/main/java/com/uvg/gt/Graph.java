@@ -1,6 +1,7 @@
 package com.uvg.gt;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.uvg.gt.Model.Node;
 import com.uvg.gt.Model.Relationship;
@@ -23,21 +24,27 @@ public class Graph implements IGraph {
     }
 
     @Override
-    public void addRelation(String start, String end, int weight) {
+    public List<Node> getNodes() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getNodes'");
+    }
+
+    @Override
+    public void addRelation(Relationship relation) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addRelation'");
     }
 
     @Override
-    public void removeRelation(String start, String end) {
+    public void removeRelation(Node start, Node end) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeRelation'");
     }
 
     @Override
-    public List<Node> getNodes() {
+    public Optional<Relationship> getRelation(Node origin, Node destination) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNodes'");
+        throw new UnsupportedOperationException("Unimplemented method 'getRelation'");
     }
 
 }
