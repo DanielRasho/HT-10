@@ -1,0 +1,51 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+' -- CLASS DECLARATION--
+interface IPathFinder <<Interface>>
+interface IGraph <<Interface>>
+class Graph
+class Node
+class PathFinder
+class App
+class CSVReader
+
+' -- CLASS RELATIONS --
+IPathFinder -u-> App
+CSVReader -u-> App
+IGraph -u-> App
+PathFinder -u-|> IPathFinder
+IGraph -r-> PathFinder
+Graph -u-|> IGraph
+Graph o-- Node
+
+' -- CLASS PROPERTIES --
+class Graph{
+    - graphIndex int[][]
+    - graphNodes Node[][]
+
+    +Graph(List<Node>)
+    +addNode(Node)
+    +removeNode(String)
+    +addRelation(String, String, int)
+    +removeRelation(String, String)
+}
+
+class PathFinder{
+    - IGraph graph
+    ' Floyds Algorithm
+    + UpdateShortestPaths()
+    + Node constructPath(String)
+}
+
+class Node {
+    - int id;
+    - String label;
+    - List<Node> neighbors
+}
+
+class CSVReader{
+    + CSVToNodes()
+}
+
+@enduml
