@@ -62,7 +62,7 @@ public class App {
             if (answer.equals("1")) {
                 showNodes(nodes);
                 var limits = askForLimits(nodes);
-
+                /**
                 List<Relationship> path = pathFinder.constructPath(limits.getOrigin(), limits.getDestination());
                 consoleWriteLine("El mejor camino es:");
                 consoleWrite(path.get(0).getOrigin(), ANSI_GREEN);
@@ -73,6 +73,7 @@ public class App {
                     consoleWrite(" -> ", ANSI_YELLOW);
                     consoleWrite(path.get(i).getDestination(), ANSI_GREEN);
                 }
+                 **/
 
             } else if (answer.equals("2")) {
                 progressBar("Finding\t", FRAMES);

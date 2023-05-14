@@ -1,9 +1,12 @@
 package com.uvg.gt;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.uvg.gt.Model.Node;
 import com.uvg.gt.Model.Relationship;
+
+import javax.swing.text.html.Option;
 
 public interface IPathFinder {
 
@@ -22,11 +25,19 @@ public interface IPathFinder {
     public Node getCentralNode();
 
     /**
-     * Return the ordered list of relations, to move from one to another.
+     * Return the ordered list of nodes, to move from one to another.
      * 
-     * @param StartNode Starting node.
-     * @param EndNode   Ending node.
+     * @param origin Starting node.
+     * @param destination   Ending node.
      * @return List of steps to move from one to another.
      */
-    public List<Relationship> constructPath(Node StartNode, Node EndNode);
+    public Optional<List<Node>> constructPath(Node origin, Node destination);
+
+    /**
+     * Returns the shortest distance needed to move from one node to another.
+     * @param origin Starting node
+     * @param destination Ending node.
+     * @return
+     */
+    public Double getShortestPath(Node origin, Node destination);
 }
