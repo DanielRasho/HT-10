@@ -62,18 +62,18 @@ public class App {
             if (answer.equals("1")) {
                 showNodes(nodes);
                 var limits = askForLimits(nodes);
-                /**
-                List<Relationship> path = pathFinder.constructPath(limits.getOrigin(), limits.getDestination());
-                consoleWriteLine("El mejor camino es:");
-                consoleWrite(path.get(0).getOrigin(), ANSI_GREEN);
-                consoleWrite(" -> ", ANSI_YELLOW);
-                consoleWrite(path.get(0).getDestination(), ANSI_GREEN);
-
-                for (int i = 1; i < path.size(); i++) {
-                    consoleWrite(" -> ", ANSI_YELLOW);
-                    consoleWrite(path.get(i).getDestination(), ANSI_GREEN);
+                var path = pathFinder.constructPath(limits.getOrigin(), limits.getDestination());
+                if (path.isEmpty()) {
+                    writeErrorMessage("No se pudo identificar el mejor camino!");
+                } else {
+                    consoleWriteLine("El mejor camino es:");
+                    for (int i = 0; i < path.get().size(); i++) {
+                        final var postfix = i + 1 == path.get().size() ? "" : " -> ";
+                        consoleWrite(String.format("(%s)", path.get().get(i).getLabel()), ANSI_YELLOW);
+                        consoleWrite(postfix, ANSI_PURPLE);
+                    }
+                    consoleWriteLine("");
                 }
-                 **/
 
             } else if (answer.equals("2")) {
                 progressBar("Finding\t", FRAMES);
@@ -167,16 +167,16 @@ public class App {
         final Function<String, Boolean> isIntAndInList = s -> {
             try {
                 var n = Integer.parseInt(s);
-                return n > 0 && n < nodes.size();
+                return n > 0 && n <= nodes.size();
             } catch (Exception e) {
                 writeErrorMessage("¡Por favor seleccione una opción válida!");
                 return false;
             }
         };
         final var originIndex = formLabel(originLabel, ANSI_CYAN, isIntAndInList,
-                Integer::parseInt);
+                Integer::parseInt) - 1;
         final var destinationIndex = formLabel(destinationLabel, ANSI_CYAN,
-                isIntAndInList, Integer::parseInt);
+                isIntAndInList, Integer::parseInt) - 1;
 
         return new Limits<>(nodes.get(originIndex), nodes.get(destinationIndex));
     }
