@@ -44,6 +44,7 @@ public class App {
         pathFinder.updateShortestPath();
 
         while (true) {
+            clearConsole();
             final var nodes = graph.getNodes();
 
             printSpaceSeparated("1)", "Calcular mejor ruta", ANSI_YELLOW);
@@ -131,6 +132,11 @@ public class App {
                 while (result.isEmpty()) {
                     var limits = askForLimits(nodes);
                     result = graph.getRelation(limits.getOrigin(), limits.getDestination());
+
+                    if (result.isEmpty()) {
+                        writeErrorMessage(String.format("No existe una carretera entre %s y %s", limits.getOrigin(),
+                                limits.getDestination()));
+                    }
                 }
 
                 final HashMap<Climates, String> translate = new HashMap<>() {
@@ -148,6 +154,9 @@ public class App {
             } else {
                 writeErrorMessage("¡Selecciona una opción válida!");
             }
+
+            consoleWriteLine("Presione enter para continuar...");
+            readLine();
         }
 
         consoleWriteLine("Gracias por usar nuestro servicio");
