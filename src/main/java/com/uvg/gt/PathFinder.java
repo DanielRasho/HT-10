@@ -102,6 +102,7 @@ public class PathFinder implements IPathFinder {
         }
     }
 
+    @Override
     public String adjacencyMatrixAsTable() {
         return matrixAsTable(adjacencyMatrix);
     }

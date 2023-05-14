@@ -38,4 +38,11 @@ public interface IPathFinder {
      * @return
      */
     public Double getShortestPath(Node origin, Node destination);
+
+    /**
+     * Returns a preformatted table representing the adjacency matrix of the inner
+     * graph.
+     * 
+     */
+    public String adjacencyMatrixAsTable();
 }
