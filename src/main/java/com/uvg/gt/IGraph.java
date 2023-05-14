@@ -3,8 +3,6 @@ package com.uvg.gt;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
-
 import com.uvg.gt.Model.Node;
 import com.uvg.gt.Model.Relationship;
 
@@ -28,6 +26,7 @@ public interface IGraph {
     /**
      * Add a relation between 2 Nodes. It creates new Nodes
      * if necessary.
+     * 
      * @param relation Relationship object.
      */
     public void addRelation(Relationship relation);
@@ -37,7 +36,7 @@ public interface IGraph {
      * Throws exception if nodes do not exist.
      *
      * @param start Start of the relationship
-     * @param end End of relationship
+     * @param end   End of relationship
      */
     public void removeRelation(Node start, Node end);
 
@@ -59,6 +58,7 @@ public interface IGraph {
      * Returns a 2D matrix compound by 2 Maps. Where the combination of
      * 2 Node labels as keys must return the relation's weight for those to keys.
      * For non-existent relations will store Double.POSITIVE_INFINITY.
+     * 
      * @return A matrix representation of the CURRENT graph.
      */
     public Map<String, Map<String, Double>> getGraphAsMatrix();

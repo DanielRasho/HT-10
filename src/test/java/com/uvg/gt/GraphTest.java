@@ -27,7 +27,7 @@ class GraphTest {
 
     @Test
     @Order(1)
-     void addNode() {
+    void addNode() {
         Node node = new Node("NewYork");
         graph.addNode(node);
         System.out.println(graph.toString());
@@ -45,7 +45,6 @@ class GraphTest {
     @Test
     @Order(3)
     void removeRelation() {
-        Relationship relationship = parser.parse("NewYork SaoPaulo 10 15 20 50");
         Node origin = new Node("NewYork");
         Node destination = new Node("SaoPaulo");
         graph.removeRelation(origin, destination);
@@ -63,17 +62,18 @@ class GraphTest {
 
     @Test
     @Order(5)
-    void getNodes(){
+    void getNodes() {
         List<Node> nodes = new ArrayList<>();
         nodes.add(new Node("BuenosAires"));
-        nodes.add(new Node ("Lima"));
-        nodes.add(new Node ("SaoPaulo"));
-        nodes.add(new Node ("Quito"));
+        nodes.add(new Node("Lima"));
+        nodes.add(new Node("SaoPaulo"));
+        nodes.add(new Node("Quito"));
         assertEquals(nodes, graph.getNodes());
     }
+
     @Test
     @Order(6)
-    void getRelation(){
+    void getRelation() {
         Node origin = new Node("Lima");
         Node destination = new Node("Quito");
         int relationWeight = graph.getRelation(origin, destination).get().getWeight();
@@ -82,7 +82,7 @@ class GraphTest {
 
     @Test
     @Order(7)
-    void getUndefinedRelation(){
+    void getUndefinedRelation() {
         Node origin = new Node("Lima");
         Node destination = new Node("Harry Potter");
         boolean existRelation = graph.getRelation(origin, destination).isEmpty();
@@ -91,7 +91,7 @@ class GraphTest {
 
     @Test
     @Order(8)
-    void getGraphAsMatrix(){
+    void getGraphAsMatrix() {
         System.out.println(graph.getGraphAsMatrix().toString());
     }
 }

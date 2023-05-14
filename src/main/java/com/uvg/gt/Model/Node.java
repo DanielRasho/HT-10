@@ -1,7 +1,5 @@
 package com.uvg.gt.Model;
 
-import java.util.HashMap;
-
 public class Node {
 
     String label;
