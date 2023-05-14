@@ -142,7 +142,7 @@ public class App {
                 };
 
                 result.ifPresent(relation -> {
-                    writeSuccessMessage("El clima es: " + translate.get(relation.getClimate()));
+                    writeSuccessMessage("El clima es: " + translate.get(relation.getCurrentClimate()));
                 });
             } else {
                 writeErrorMessage("¡Selecciona una opción válida!");

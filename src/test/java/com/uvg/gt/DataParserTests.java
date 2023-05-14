@@ -17,6 +17,6 @@ public class DataParserTests {
         assertEquals("BuenosAires", parsed.getOrigin().getLabel());
         assertEquals("SaoPaulo", parsed.getDestination().getLabel());
         assertEquals(10, parsed.getWeight());
-        assertEquals(Climates.NORMAL, parsed.getClimate());
+        assertEquals(Climates.NORMAL, parsed.getCurrentClimate());
     }
 }

@@ -1,11 +1,18 @@
 package com.uvg.gt.Model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 
+@Getter
 public class Relationship {
     private Node origin;
     private Node destination;
+    @Getter(AccessLevel.NONE)
     private HashMap<Climates, Integer> weights;
+    @Setter
     private Climates currentClimate = Climates.NORMAL;
 
     public Relationship(Node origin, Node destination, HashMap<Climates, Integer> weights) {
@@ -14,24 +21,16 @@ public class Relationship {
         this.weights = weights;
     }
 
-    public Node getOrigin() {
-        return origin;
-    }
-
-    public Node getDestination() {
-        return destination;
-    }
-
     public int getWeight() {
         return weights.get(currentClimate);
     }
 
-    public Climates getClimate() {
-        return currentClimate;
+    public void setClimate(Climates newClimate) {
+        currentClimate = newClimate;
     }
 
-    public void changeClimate(Climates newClimate) {
-        currentClimate = newClimate;
+    public Climates getCurrentClimate() {
+        return currentClimate;
     }
 
     @Override

@@ -23,11 +23,11 @@ public class RelationshipTests {
         };
 
         var relation = new Relationship(new Node("Hello"), new Node("Goodbye"), weights);
-        assertEquals(Climates.NORMAL, relation.getClimate());
+        assertEquals(Climates.NORMAL, relation.getCurrentClimate());
         assertEquals(56, relation.getWeight());
 
-        relation.changeClimate(Climates.BLIZZARD);
-        assertEquals(Climates.BLIZZARD, relation.getClimate());
+        relation.setClimate(Climates.BLIZZARD);
+        assertEquals(Climates.BLIZZARD, relation.getCurrentClimate());
         assertEquals(20, relation.getWeight());
     }
 }
