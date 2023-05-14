@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
@@ -20,6 +21,14 @@ public class App {
     public static void main(String[] args) {
         clearConsole();
         showTitle(_title, ANSI_PURPLE);
+        final HashMap<Climates, String> translate = new HashMap<>() {
+            {
+                put(Climates.NORMAL, "Normal");
+                put(Climates.BLIZZARD, "Nevado");
+                put(Climates.RAIN, "Lluvia");
+                put(Climates.STORM, "Tormenta");
+            }
+        };
 
         final var parser = new DataParser();
         final List<Relationship> relations = new ArrayList<>();
@@ -46,12 +55,17 @@ public class App {
         while (true) {
             clearConsole();
             final var nodes = graph.getNodes();
+            final var matrix = pathFinder.adjacencyMatrixAsTable();
+            consoleWriteLine("La matriz de adyacencia para el grafo es:");
+            consoleWriteLine(matrix);
+            consoleWriteLine(SUB_DIVIDER);
 
             printSpaceSeparated("1)", "Calcular mejor ruta", ANSI_YELLOW);
             printSpaceSeparated("2)", "Encontrar ciudad central", ANSI_YELLOW);
             printSpaceSeparated("3)", "Remover carretera", ANSI_YELLOW);
             printSpaceSeparated("4)", "Construir carretera", ANSI_YELLOW);
             printSpaceSeparated("5)", "Ver clima", ANSI_YELLOW);
+            printSpaceSeparated("6)", "Cambiar clima", ANSI_YELLOW);
             printSpaceSeparated("q)", "Salir", ANSI_YELLOW);
 
             var answer = formLabel("Por favor seleccione una opción", ANSI_CYAN);
@@ -139,18 +153,56 @@ public class App {
                     }
                 }
 
-                final HashMap<Climates, String> translate = new HashMap<>() {
-                    {
-                        put(Climates.NORMAL, "Normal");
-                        put(Climates.BLIZZARD, "Nevado");
-                        put(Climates.RAIN, "Lluvia");
-                        put(Climates.STORM, "Tormenta");
-                    }
-                };
-
                 result.ifPresent(relation -> {
                     writeSuccessMessage("El clima es: " + translate.get(relation.getCurrentClimate()));
                 });
+            } else if (answer.equals("6")) {
+                showNodes(nodes);
+
+                Optional<Relationship> result = Optional.empty();
+                while (result.isEmpty()) {
+                    var limits = askForLimits(nodes);
+                    result = graph.getRelation(limits.getOrigin(), limits.getDestination());
+
+                    if (result.isEmpty()) {
+                        writeErrorMessage(String.format("No existe una carretera entre %s y %s", limits.getOrigin(),
+                                limits.getDestination()));
+                    }
+                }
+
+                result.ifPresent(r -> {
+                    printSpaceSeparated("1)", translate.get(Climates.NORMAL), ANSI_YELLOW);
+                    printSpaceSeparated("2)", translate.get(Climates.BLIZZARD), ANSI_YELLOW);
+                    printSpaceSeparated("3)", translate.get(Climates.RAIN), ANSI_YELLOW);
+                    printSpaceSeparated("4)", translate.get(Climates.STORM), ANSI_YELLOW);
+
+                    var selectedClimate = formLabel("Seleccione un clima", ANSI_CYAN, s -> {
+                        try {
+                            final var n = Integer.parseInt(s);
+                            return n > 0 && n <= 4;
+                        } catch (Exception e) {
+                            writeErrorMessage("Por favor seleccione un clima válido!");
+                            return false;
+                        }
+                    }, s -> {
+                        switch (s) {
+                            case "1":
+                                return Climates.NORMAL;
+                            case "2":
+                                return Climates.BLIZZARD;
+                            case "3":
+                                return Climates.RAIN;
+                            case "4":
+                                return Climates.STORM;
+                            default:
+                                throw new NoSuchElementException();
+                        }
+                    });
+
+                    r.setClimate(selectedClimate);
+                });
+                writeSuccessMessage("El clima ha sido cambiado!");
+                pathFinder.updateShortestPath();
             } else {
                 writeErrorMessage("¡Selecciona una opción válida!");
             }
