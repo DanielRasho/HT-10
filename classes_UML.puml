@@ -1,51 +1,105 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+
+
 ' -- CLASS DECLARATION--
 interface IPathFinder <<Interface>>
 interface IGraph <<Interface>>
 class Graph
 class Node
+class Relationship
 class PathFinder
 class App
-class CSVReader
+class DataParser
+enum Climates
 
 ' -- CLASS RELATIONS --
 IPathFinder -u-> App
-CSVReader -u-> App
-IGraph -u-> App
+DataParser -u-> App
+IGraph --u-> App
 PathFinder -u-|> IPathFinder
 IGraph -r-> PathFinder
 Graph -u-|> IGraph
 Graph o-- Node
+Graph o-- Relationship
+Climates -r-> Relationship
+Climates --u--> DataParser
+
+' -- INTERFACE PROPERTIES
+interface IGraph{
+    + addNode(Node)
+    + removeNode(String) : Node
+    + addRelation()
+    + removeRelation()
+    + getNodes() : List<Node>
+    + getRelation(Node, Node): Optional<Relationship>
+    + getGraphAsMatrix(): Map<String, Map<String, Double>>
+}
+
+interface IPathFinder{
+    + updateShortestPath()
+    + getCentralNode(): Node
+    + constructPath(Node, Node): Optional<List<Node>>
+}
 
 ' -- CLASS PROPERTIES --
-class Graph{
-    - graphIndex int[][]
-    - graphNodes Node[][]
+class App {
+    + main(String[] args)
+}
 
-    +Graph(List<Node>)
-    +addNode(Node)
-    +removeNode(String)
-    +addRelation(String, String, int)
-    +removeRelation(String, String)
+enum Climates{
+    NORMAL
+    RAIN
+    STORM
+    BLIZZARD
+}
+
+class Graph{
+    - List<Node> nodes
+    - List<Relationship> relations
+
+    + Graph(List<Node>)
+    + addNode(Node)
+    + removeNode(String)
+    + addRelation(String, String, int)
+    + removeRelation(String, String)
+    + getNodes(): List<Node>
+    + getGraphAsMatrix() : Map<String, Map<String, Double>>
+    + nodeExist(Node) : Boolean
+    + nodeExist(String) : Boolean
+    + relationExist(Relationship) : Boolean
+
 }
 
 class PathFinder{
-    - IGraph graph
+    - Map<String, Map<String, Double>> originalMatrix
+    - Map<String, Map<String, Double>> distances
+    - Map<String, Map<String, Double>> paths
+
     ' Floyds Algorithm
     + UpdateShortestPaths()
     + Node constructPath(String)
+    + adjacencyMatrixAsTable(): String
+    + distanceAsTable(): String
+    + pathAsTable(): String
+
 }
 
 class Node {
-    - int id;
     - String label;
-    - List<Node> neighbors
 }
 
-class CSVReader{
-    + CSVToNodes()
+class Relationship{
+    - Node origin
+    - Node destination
+    - HashMap<Climates, Integer> weights
+    - Climates currentClimate
+
+}
+
+class DataParser{
+    + parse(String) Relationship
 }
 
 @enduml

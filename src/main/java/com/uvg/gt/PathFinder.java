@@ -107,10 +107,12 @@ public class PathFinder implements IPathFinder {
         return matrixAsTable(adjacencyMatrix);
     }
 
+    @Override
     public String distanceAsTable() {
         return matrixAsTable(distances);
     }
 
+    @Override
     public String pathsAsTable() {
         return matrixAsTable(paths);
     }

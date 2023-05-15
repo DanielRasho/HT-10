@@ -45,4 +45,16 @@ public interface IPathFinder {
      * 
      */
     public String adjacencyMatrixAsTable();
+
+    /**
+     * Returns a preformatted table representing the adjacency the Floyds matrix
+     *
+     */
+    public String distanceAsTable();
+
+    /**
+     * Returns a preformatted table representing the adjacency matrix of nodes
+     * to get the shortest path.
+     */
+    public String pathsAsTable();
 }
