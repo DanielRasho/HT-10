@@ -88,6 +88,8 @@ public class App {
                         consoleWrite(postfix, ANSI_PURPLE);
                     }
                     consoleWriteLine("");
+                    consoleWriteLine(String.format("Con una longitud de: %.0f",
+                            pathFinder.getShortestPath(limits.getOrigin(), limits.getDestination())));
                 }
 
             } else if (answer.equals("2")) {
